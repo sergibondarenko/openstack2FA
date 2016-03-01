@@ -1,0 +1,34 @@
+CHANGES
+=======
+
+* Add package glue files
+* Add .txt to gitignore
+* Add blank horizon plugin
+* Mark - Code cleanup
+* Login bug resolution
+* RHFC-2: Implementazione verifica password
+* Users database
+* Modified database configuration
+* Users database
+* Modified database configuration
+* RHFC-2: Implementazione verifica password
+* Users database
+* Modified database configuration
+* Login bug resolution
+* RHFC-2: Implementazione verifica password
+* Users database
+* Modified database configuration
+* Users database
+* Modified database configuration
+* RHFC-2: Implementazione verifica password
+* Users database
+* Modified database configuration
+* RHFC-2: Implementazione verifica password
+* Implement otp checking in qr image show phase
+* Implement password input
+* Clean code
+* RHFC-1: Add registration (new user + new secret key + qrcode)
+* Clean templates
+* Create Django project and app. Implement otp login
+* aggiunto gitignore
+* first commit
