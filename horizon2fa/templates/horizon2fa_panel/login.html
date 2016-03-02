@@ -1,7 +1,13 @@
-{% extends "base.html" %}
-{% block title %}Python TOTP Demo{% endblock %}
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Two-Factor Auth" %}{% endblock %}
 {% block pagetitle %}Log in{% endblock %}
-{% block content %}
+
+{% block page_header %}
+  {% include "horizon/common/_domain_page_header.html" with title=page_title %}
+{% endblock page_header %}
+
+{% block main %}
   <form class="form" role="form" method="post">{% csrf_token %}
   <div class="form-group">
     <label for="input-email">Username</label>
@@ -15,7 +21,7 @@
     <label for="input-otp">Temporary code</label>
     <input type="text" name="otp" class="form-control" id="input-otp" placeholder="Enter Temporary Code">
   </div>
-  <a href="/" class="btn btn-default">Back</a>
+  <a href="index" class="btn btn-default">Back</a>
   <button type="submit" class="btn btn-primary" style="width: 300px;">Log in</button>
 </form>
 {% endblock %}

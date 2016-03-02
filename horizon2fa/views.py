@@ -11,10 +11,19 @@ twoFA = Horizon2FA()
 
 
 class IndexView(generic.TemplateView):
-    template_name = 'identity/horizon2fa_panel/index.html'
+    template_name = 'horizon2fa_panel/index.html'
+
 
 def index(request):
-    return render(request, 'horizon2fa/index.html', {})
+    return render(request, 'horizon2fa_panel/index.html', {})
+
+
+def loginview(request):
+    return render(request, 'horizon2fa_panel/login.html', {})
+
+
+def newview(request):
+    return render(request, 'horizon2fa_panel/new.html', {})
 
 
 def otpconfirm(request):
@@ -32,7 +41,7 @@ def otpconfirm(request):
             print("[Error]: Fail to confirm otp. Details: %s." % e)
 
     else:
-        return render(request, 'horizon2fa/new.html', {})
+        return render(request, 'horizon2fa_panel/new.html', {})
 
 
 def login(request):
@@ -48,15 +57,15 @@ def login(request):
                 return result
             else:
                 context = {'user': {'email': user.email}}
-                return render(request, 'horizon2fa/'
+                return render(request, 'horizon2fa_panel/'
                               + result['route'], context)
 
         except Exception as e:
             print("[Error]: Fail to login on backend. Details: %s." % e)
-            return render(request, 'horizon2fa/login.html', {})
+            return render(request, 'horizon2fa_panel/login.html', {})
 
     else:
-        return render(request, 'horizon2fa/login.html', {})
+        return render(request, 'horizon2fa_panel/login.html', {})
 
 
 @csrf_exempt
@@ -79,11 +88,11 @@ def new(request):
         u = twoFA.new(request.POST['email'], None, request.POST['password'])
 
         if twoFA.save(u):
-            return render(request, 'horizon2fa/created.html', {'user':u})
+            return render(request, 'horizon2fa_panel/created.html', {'user':u})
         else:
             return HttpResponse('Invalid email or user already exists.')
     else:
-        return render(request, 'horizon2fa/new.html')
+        return render(request, 'horizon2fa_panel/new.html')
 
 
 def qr(request):

@@ -1,7 +1,13 @@
-{% extends "base.html" %}
-{% block title %}Python TOTP Demo{% endblock %}
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Two-Factor Auth" %}{% endblock %}
 {% block pagetitle %}Create a New User{% endblock %}
-{% block content %}
+
+{% block page_header %}
+  {% include "horizon/common/_domain_page_header.html" with title=page_title %}
+{% endblock page_header %}
+
+{% block main %}
   <div class="row">
       <div class="col-md-12">
   <form class="form" role="form" method="post">{% csrf_token %}
@@ -13,7 +19,7 @@
     <label class="" for="input-password">Password</label>
     <input type="password" name="password" class="form-control" id="input-password" placeholder="Enter password">
   </div>
-          <a href="/" class="btn btn-default">Back</a>
+          <a href="index" class="btn btn-default">Back</a>
   <button type="submit" class="btn btn-primary" style="width: 300px;">Sign up</button>
       </div>
       </div>
