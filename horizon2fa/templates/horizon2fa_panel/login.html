@@ -8,7 +8,7 @@
 {% endblock page_header %}
 
 {% block main %}
-  <form class="form" role="form" method="post">{% csrf_token %}
+  <form class="form" role="form" method="post" action="login">{% csrf_token %}
   <div class="form-group">
     <label for="input-email">Username</label>
     <input type="text" name="email" class="form-control" id="input-email" placeholder="Enter username" value="{{request.form.email}}">
