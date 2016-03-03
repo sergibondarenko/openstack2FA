@@ -10,7 +10,7 @@
 {% block main %}
   <div class="row">
       <div class="col-md-12">
-  <form class="form" role="form" method="post">{% csrf_token %}
+  <form class="form" role="form" method="post" action="new">{% csrf_token %}
   <div class="form-group">
     <label class="" for="input-email">Username</label>
     <input type="text" name="email" class="form-control" id="input-email" placeholder="Enter username">
