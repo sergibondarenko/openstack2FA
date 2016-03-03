@@ -35,7 +35,7 @@ def otpconfirm(request):
             if 'system' in result.keys():
                 return result
             else:
-                return HttpResponseRedirect('/login')
+                return HttpResponseRedirect('login')
 
         except Exception as e:
             print("[Error]: Fail to confirm otp. Details: %s." % e)
