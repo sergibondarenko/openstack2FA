@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from main import Horizon2FA
 from keystoneclient.v3 import client
 from user import User
+import misc
 
 
 twoFA = Horizon2FA()
@@ -17,44 +18,33 @@ class IndexView(generic.TemplateView):
 
 
 def index(request):
+#    hz_user_name = request.user.username
+#    hz_user_id = request.user.id
+#    user_exists = False
 
-    #print "\n\n########## - Start of My Debug - ##########"
+#    if hz_user_name != 'admin':
+    if request.user.username != 'admin':
+        user_exists = misc.verify2fa(request)
+#        keystone = client.Client(username='admin',
+#                                 password='password',
+#                                 project_name='admin',
+#                                 auth_url='http://localhost:5000/v3')
+#        user = keystone.users.get(hz_user_id) 
+#        kc_user_email = str(user.email)
 
-    hz_user_name = request.user.username
-    hz_user_id = request.user.id
-    user_exists = False
-
-    if hz_user_name != 'admin':
-        keystone = client.Client(username='admin',
-                                 password='password',
-                                 project_name='admin',
-                                 auth_url='http://localhost:5000/v3')
-        user = keystone.users.get(hz_user_id) 
-        kc_user_email = str(user.email)
-
-        print "\n\n########## - Start of My Debug - ##########"
-        u = User.get_user(kc_user_email)
-        if u is None:
-            user_exists = False
-            print str(user_exists)
-            return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
-        else:
-            user_exists = True
-            print str(user_exists)
-            return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
-
-#        if u is None: # Prevedere exception!
-#            print("[Error]: Invalid email address.")
-#            return render(request, 'horizon2fa_panel/index.html', {})
-#        else:
-#            print("### MAIL ADDRESS OK!")
-#            return render(request, 'horizon2fa_panel/index.html', {})
-
+#        print "\n\n########## - Start of My Debug - ##########"
+#        u = User.get_user(kc_user_email)
+#        if u is None: # User is NOT registered for TFA
+#            user_exists = False
+#            print str(user_exists)
+#            return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
+#        else: # User is already registered for TFA
+#            user_exists = True
+#            print str(user_exists)
+#            return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
+        return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
     else:
         return render(request, 'horizon2fa_panel/index.html', {})
-
-#    print "########## - End of My Debug - ##########\n\n"
-#    return render(request, 'horizon2fa_panel/index.html', {})
 
 
 def loginview(request):
