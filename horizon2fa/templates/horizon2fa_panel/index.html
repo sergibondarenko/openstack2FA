@@ -16,10 +16,34 @@
   <p>
     Here you can enable the Two-Factor Authentication feature or login if you have already enabled it.
   </p>
+  <div class="form-group">
+    <label class="" for="input-password">Password</label>
+    <input type="password" name="password" class="form-control" id="input-password" placeholder="Enter password">
+  </div>
   <p>
     <a href="newview" class="btn btn-primary">Sign Up</a>
     <a href="loginview" class="btn btn-primary">Login</a>
   </p>
+</p>
+
+{% if user_exists %}
+    No need to signup
+{% else %}
+    You should signup to enable TFA
+{% endif %}
+
+
+
+<p>
+  Username: <span class="user-name">{{ request.user.username }}</span><br />
+  Userid: <span class="user-name">{{ request.user.id }}</span><br />
+  Session: <span>{{ request.session}}</span><br />
+  Token: <span>{{ request.user.token.id }}</span><br />
+  Variable: {{ user_exists }}
+</p>
+<p>
+  {% if request.user.is_authenticated %}Welcome '{{ request.user.username }}'
+  {% else %}<a href="{% url django.contrib.auth.login %}">Login</a>{% endif %}
 </p>
 
 {% endblock %}

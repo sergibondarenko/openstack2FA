@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Two-Factor Auth" %}{% endblock %}
+{% block pagetitle %}Two-Factor Auth{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_domain_page_header.html" with title=page_title %}
+{% endblock page_header %}
+
+{% block main %}
+<div>
+  <h3>{% trans "Two-Factor Authentication" %}</h3>
+</div>
+
+<p>
+  <p>
+    Here you can enable the Two-Factor Authentication feature or login if you have already enabled it.
+  </p>
+  <p>
+    <a href="newview" class="btn btn-primary">Sign Up</a>
+    <a href="loginview" class="btn btn-primary">Login</a>
+  </p>
+</p>
+
+{% endblock %}

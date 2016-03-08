@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from main import Horizon2FA
 from keystoneclient.v3 import client
 from user import User
+import pdb
 
 
 twoFA = Horizon2FA()
@@ -18,43 +19,77 @@ class IndexView(generic.TemplateView):
 
 def index(request):
 
-    #print "\n\n########## - Start of My Debug - ##########"
+    print "########## - Start of My Debug - ##########"
 
-    hz_user_name = request.user.username
-    hz_user_id = request.user.id
-    user_exists = False
+    kc_user_name = request.user.username
+    kc_user_id = request.user.id
+    #kc_user_password = request.POST['password']
+    kc_user_password = 'password'
+    try:
+        keystone = client.Client(username=kc_user_name,
+                                 password=kc_user_password,
+                                 auth_url="http://localhost:5000/v3")
+    except keystoneauth1.exceptions.http.Unauthorized:
+        print "User not allowed"
 
-    if hz_user_name != 'admin':
-        keystone = client.Client(username='admin',
-                                 password='password',
-                                 project_name='admin',
-                                 auth_url='http://localhost:5000/v3')
-        user = keystone.users.get(hz_user_id) 
-        kc_user_email = str(user.email)
+    keystone = client.Client(username='admin',
+                             password='password',
+                             project_name='admin',
+                             auth_url='http://localhost:5000/v3')
 
-        print "\n\n########## - Start of My Debug - ##########"
-        u = User.get_user(kc_user_email)
-        if u is None:
-            user_exists = False
-            print str(user_exists)
-            return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
-        else:
-            user_exists = True
-            print str(user_exists)
-            return render(request, 'horizon2fa_panel/index.html', { "user_exists":user_exists })
+    print kc_user_name
+    print kc_user_id
+    print kc_user_password
+    pdb.set_trace()
+    user = keystone.users.get(kc_user_id) 
+    kc_user_email = str(user.email)
+#    print str(user)
 
-#        if u is None: # Prevedere exception!
-#            print("[Error]: Invalid email address.")
-#            return render(request, 'horizon2fa_panel/index.html', {})
-#        else:
-#            print("### MAIL ADDRESS OK!")
-#            return render(request, 'horizon2fa_panel/index.html', {})
-
+    u = User.get_user(kc_user_email)
+    if u is None:
+        print("[Error]: Invalid email address.")
     else:
-        return render(request, 'horizon2fa_panel/index.html', {})
+        print("### MAIL ADDRESS OK!")
 
-#    print "########## - End of My Debug - ##########\n\n"
-#    return render(request, 'horizon2fa_panel/index.html', {})
+####################
+#       |      >>> keystone = client.Client(endpoint="http://localhost:5000/v3", token="94f4b9dd562c4490adbf5c844a97a2a3")
+#       |      >>> keystone.projects.list()
+#       |      ...
+#       |      >>> user = keystone.users.get(USER_ID)
+#       |      >>> user.delete()
+#  
+#  
+#  mark	87fdc59866e24cb98e57a8f0ab9a4558
+#  admin	be14601a92bd4595adf0aa1d5464e083
+#
+#
+#
+#             u = twoFA.new(request.POST['email'], None, request.POST['password'])
+#
+####################
+
+#    print "### Username: " + str(request.user.username)
+#
+#    if not request.user.check_password('password'):
+#        print "### INVALID PASSWORD"
+#    else:
+#        print "### Password is OK"
+#
+#    print " ### ----------"
+#
+#    print request.user.token.id
+#    print str(request.user.token.id)
+#
+#    print " ### ----------"
+#
+#    # TESTS OK!!!
+#    #conn = keystone.keystoneclient(request, admin=True)
+#    #print keystone.user_list(request, project='admin', domain='Default')
+#    #conn = 
+
+    print "########## - End of My Debug - ##########"
+
+    return render(request, 'horizon2fa_panel/index.html', {})
 
 
 def loginview(request):
