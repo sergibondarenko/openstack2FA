@@ -8,20 +8,24 @@
 {% endblock page_header %}
 
 {% block main %}
-  <div class="row">
-      <div class="col-md-12">
-  <form class="form" role="form" method="post" action="new">{% csrf_token %}
-  <div class="form-group">
-    <label class="" for="input-email">Username</label>
-    <input type="text" name="email" class="form-control" id="input-email" placeholder="Enter username">
-  </div>
-  <div class="form-group">
-    <label class="" for="input-password">Password</label>
-    <input type="password" name="password" class="form-control" id="input-password" placeholder="Enter password">
-  </div>
-          <a href="index" class="btn btn-primary">Back</a>
-  <button type="submit" class="btn btn-primary">Sign up</button>
+<div class="row">
+  <div class="col-md-4">
+    <form class="form" role="form" method="post" action="new">{% csrf_token %}
+      <div class="form-group">
+        <label class="" for="input-email">Username</label>
+        {% if user_email == None %}
+          <input class="form-control" id="input-email" placeholder="Enter you email address" type="text" name="email">
+        {% else %}
+          <input class="form-control" id="disabledInput" placeholder="{{ user_email }}" disabled="" type="text" name="email">
+        {% endif %}
       </div>
+      <div class="form-group">
+        <label class="" for="input-password">Password</label>
+        <input type="password" name="password" class="form-control" id="input-password" placeholder="Enter password">
       </div>
+      <a href="index" class="btn btn-primary">Back</a>
+      <button type="submit" class="btn btn-primary">Enable 2FA</button>
     </form>
+  </div>
+</div>
 {% endblock %}
