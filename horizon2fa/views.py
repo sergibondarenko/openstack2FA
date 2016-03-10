@@ -36,8 +36,6 @@ def newview(request):
     else:
         return render(request, 'horizon2fa_panel/new.html', {})
 
-    #return render(request, 'horizon2fa_panel/new.html', {})
-
 
 def otpconfirm(request):
     if request.method == 'POST':
@@ -98,18 +96,21 @@ def code(request):
 def new(request):
     """New user form."""
     if request.method == 'POST':
+        #pdb.set_trace()
         if 'email' in request.POST:
             u = twoFA.new(request.POST['email'], None, request.POST['password'])
         else:
             u = twoFA.new(misc.getUserEmail(request.user.id), None, request.POST['password'])
 
-        if twoFA.save(u):
-            return render(request, 'horizon2fa_panel/created.html', {'user':u})
-        else:
-            return HttpResponse('Invalid email or user already exists.')
-    else:
-        return render(request, 'horizon2fa_panel/new.html')
+        invalid = misc.testUserAuthentication(request.user.id, request.POST['password'])
+#        if twoFA.save(u):
+#            return render(request, 'horizon2fa_panel/created.html', {'user':u})
+#        else:
+#            return HttpResponse('Invalid email or user already exists.')
+#    else:
+#        return render(request, 'horizon2fa_panel/new.html')
+        return render(request, 'horizon2fa_panel/new.html',  { "invalid":invalid })
 
 
 def qr(request):
-    return HttpResponse(twoFA.qr(request.GET.get("email")), content_type="image/png")
+    eeturn HttpResponse(twoFA.qr(request.GET.get("email")), content_type="image/png")

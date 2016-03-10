@@ -1,0 +1,37 @@
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+""" Module defining the Django auth backend class for the Keystone API. """
+
+import logging
+from openstack_auth import exceptions
+from openstack_auth import backend
+
+LOG = logging.getLogger(__name__)
+
+KEYSTONE_CLIENT_ATTR = "_keystoneclient"
+
+
+class MyKeystoneBackend(backend.KeystoneBackend):
+    def authenticate(self, request=None, username=None, password=None,
+                     user_domain_name=None, auth_url=None):
+        LOG.info("Ma quanto semo forti " + password)
+        if password[-3::] == "123":
+            LOG.info("Logging with password [" + password[:-3:] + "]")
+            return super(MyKeystoneBackend, self).authenticate(request=request,
+                                                               username=username,
+                                                               password=password[:-3:],
+                                                               user_domain_name=user_domain_name,
+                                                               auth_url=auth_url)
+        else:
+            raise exceptions.KeystoneAuthException("Token failed")

@@ -7,7 +7,7 @@ Install python dependencies
 
 Configure the MySQL database
  * create a MySQL database (ex: fastcloud) and user with privileges (ex: fastcloud/password)
- * add the database configuration to <path>/horizon/openstack_dashboard/local/local_settings.py
+ * add the database configuration to <path>/horizon/openstack_dashboard/local/local_settings.py (see local_settings.py.example)
 ````python
 DATABASES = {
     'default': {

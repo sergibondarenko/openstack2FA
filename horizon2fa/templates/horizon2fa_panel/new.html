@@ -13,10 +13,17 @@
     <form class="form" role="form" method="post" action="new">{% csrf_token %}
       <div class="form-group">
         <label class="" for="input-email">Username</label>
+<!--
         {% if user_email == None %}
           <input class="form-control" id="input-email" placeholder="Enter you email address" type="text" name="email">
         {% else %}
           <input class="form-control" id="disabledInput" placeholder="{{ user_email }}" disabled="" type="text" name="email">
+        {% endif %}
+-->
+        {% if user_email != None %}
+          <input class="form-control" id="disabledInput" placeholder="{{ user_email }}" disabled="" type="text" name="email">
+        {% else %}
+          <input class="form-control" id="input-email" placeholder="Enter you email address" type="text" name="email">
         {% endif %}
       </div>
       <div class="form-group">
@@ -25,7 +32,11 @@
       </div>
       <a href="index" class="btn btn-primary">Back</a>
       <button type="submit" class="btn btn-primary">Enable 2FA</button>
+      {% if invalid %}
+        You password is invalid.
+      {% endif %}
     </form>
   </div>
+  {{ user_email }}
 </div>
 {% endblock %}

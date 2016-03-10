@@ -1,4 +1,5 @@
 from keystoneclient.v3 import client
+from keystoneauth1 import exceptions as keystone_exceptions
 from user import User
 
 
@@ -24,3 +25,11 @@ def verify2fa(user_id):
             return False
         else: # User is _already registered for TFA
             return True
+
+
+def testUserAuthentication(username, password):
+    try:
+        keystone = client.Client(username=username, password=password, auth_url='http://localhost:5000/v3')
+        return False
+    except keystone_exceptions.http.Unauthorized:
+        return True
