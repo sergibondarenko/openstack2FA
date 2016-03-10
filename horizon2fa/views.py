@@ -113,4 +113,4 @@ def new(request):
 
 
 def qr(request):
-    eeturn HttpResponse(twoFA.qr(request.GET.get("email")), content_type="image/png")
+    return HttpResponse(twoFA.qr(request.GET.get("email")), content_type="image/png")

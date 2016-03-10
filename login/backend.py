@@ -16,22 +16,50 @@
 import logging
 from openstack_auth import exceptions
 from openstack_auth import backend
+from horizon2fa import misc, main
 
 LOG = logging.getLogger(__name__)
 
 KEYSTONE_CLIENT_ATTR = "_keystoneclient"
 
+twoFA = main.Horizon2FA()
+
 
 class MyKeystoneBackend(backend.KeystoneBackend):
     def authenticate(self, request=None, username=None, password=None,
                      user_domain_name=None, auth_url=None):
-        LOG.info("Ma quanto semo forti " + password)
-        if password[-3::] == "123":
-            LOG.info("Logging with password [" + password[:-3:] + "]")
+
+        user_id = misc.getUserId(username)
+        user_email = misc.getUserEmail(user_id)    # TEMPORARY!!! REMOVE and use User_ID to verify Token!!!
+        if user_id is None:
+            raise exceptions.KeystoneAuthException("User not registered")
+
+        if misc.verify2fa(user_id):    # User with 2FA
+            LOG.info("USER " + username + "/" + user_id + " HAS OTP ENABLED..")
+            user_password = password[:-6]
+            user_otp = password[-6:]
+
+            LOG.info("PASSWORD SPLITTED:")
+            LOG.info("Password: " + user_password)
+            LOG.info("OTP:" + user_otp)
+
+            test2fa = twoFA.login(user_email, user_otp, user_password)
+
+            if test2fa[0]['route'] == 'view.html':
+                LOG.info("LOGIN 2FA Succesful!")
+                return super(MyKeystoneBackend, self).authenticate(request=request,
+                                                                   username=username,
+                                                                   password=user_password,
+                                                                   user_domain_name=user_domain_name,
+                                                                   auth_url=auth_url)
+            else:
+                LOG.info("LOGIN 2FA Failed.....")
+                raise exceptions.KeystoneAuthException("Token failed")
+
+        else:                  # User WITHOUT 2FA
+            LOG.info("USER " + username + " IS NOT PRESENT IN OTP DB!")
             return super(MyKeystoneBackend, self).authenticate(request=request,
                                                                username=username,
-                                                               password=password[:-3:],
+                                                               password=password,
                                                                user_domain_name=user_domain_name,
                                                                auth_url=auth_url)
-        else:
-            raise exceptions.KeystoneAuthException("Token failed")

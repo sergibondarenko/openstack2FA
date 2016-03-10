@@ -3,6 +3,20 @@ from keystoneauth1 import exceptions as keystone_exceptions
 from user import User
 
 
+def getUserId(user_name):
+    keystone = client.Client(username='admin',
+                             password='password',
+                             project_name='admin',
+                             auth_url='http://localhost:5000/v3')
+    users_list = keystone.users.list()
+    u = next(( i for i in users_list if i.name == user_name), None)
+
+    if u is None:
+        return u
+    else:
+        return u.id
+    
+
 def getUserEmail(user_id):
     keystone = client.Client(username='admin',
                              password='password',
