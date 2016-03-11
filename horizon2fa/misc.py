@@ -17,33 +17,39 @@ def getUserId(user_name):
         return u.id
     
 
-def getUserEmail(user_id):
-    keystone = client.Client(username='admin',
-                             password='password',
-                             project_name='admin',
-                             auth_url='http://localhost:5000/v3')
-    try:
-        user = keystone.users.get(user_id)
-        return str(user.email)
-    except ObjectDoesNotExist:
-        return None
+def getUserEmail(user_id):                          # WARNING
+#     keystone = client.Client(username='admin',
+#                              password='password',
+#                              project_name='admin',
+#                              auth_url='http://localhost:5000/v3')
+#     try:
+#         user = keystone.users.get(user_id)
+#         return str(user.email)                          # WARNING
+#     except ObjectDoesNotExist:
+#         return None
+# WORKAROUND
+    return "mpesenti@sorint.it"
 
 
 def verify2fa(user_id):
-    user_email = getUserEmail(user_id)
-    if user_email is None:
-        return True # WARNING - Temporary workaround
-    else:
-        u = User.get_user(user_email)
-        if u is None: # User is NOT registered for TFA
-            return False
-        else: # User is _already registered for TFA
-            return True
+#     user_email = getUserEmail(user_id)                          # WARNING
+#     if user_email is None:                          # WARNING
+#         return True # WARNING - Temporary workaround
+#     else:
+#         u = User.get_user(user_email)                          # WARNING
+#         if u is None: # User is NOT registered for TFA
+#             return False
+#         else: # User is _already registered for TFA
+#             return True
+# WORKAROUND
+    return True
 
 
 def testUserAuthentication(username, password):
-    try:
-        keystone = client.Client(username=username, password=password, auth_url='http://localhost:5000/v3')
-        return False
-    except keystone_exceptions.http.Unauthorized:
-        return True
+#     try:
+#         keystone = client.Client(username=username, password=password, auth_url='http://localhost:5000/v3')
+#         return False
+#     except keystone_exceptions.http.Unauthorized:
+#         return True
+# WORKAROUND
+    return True

@@ -10,7 +10,7 @@
 {% block main %}
   <p>Here is your QR code:</p>
   <p>
-      <img src="qr/?email={{user.email}}" />
+      <img src="qr/?userid={{request.user.id}}" />
   </p>
   <p>
       Your secret key is: {{user.key}}

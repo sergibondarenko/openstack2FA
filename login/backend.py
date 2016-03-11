@@ -35,29 +35,25 @@ class MyKeystoneBackend(backend.KeystoneBackend):
             raise exceptions.KeystoneAuthException("User not registered")
 
         if misc.verify2fa(user_id):    # User with 2FA
-            LOG.info("USER " + username + "/" + user_id + " HAS OTP ENABLED..")
+            LOG.info("User '" + username + " - " + user_id + "' has the Two-Factor authentication ENABLED")
             user_password = password[:-6]
             user_otp = password[-6:]
-
-            LOG.info("PASSWORD SPLITTED:")
-            LOG.info("Password: " + user_password)
-            LOG.info("OTP:" + user_otp)
 
             test2fa = twoFA.login(user_email, user_otp, user_password)
 
             if test2fa[0]['route'] == 'view.html':
-                LOG.info("LOGIN 2FA Succesful!")
+                LOG.info("Two-Factor authentication: Success")
                 return super(MyKeystoneBackend, self).authenticate(request=request,
                                                                    username=username,
                                                                    password=user_password,
                                                                    user_domain_name=user_domain_name,
                                                                    auth_url=auth_url)
             else:
-                LOG.info("LOGIN 2FA Failed.....")
+                LOG.info("Two-Factor authentication: Failed")
                 raise exceptions.KeystoneAuthException("Token failed")
 
         else:                  # User WITHOUT 2FA
-            LOG.info("USER " + username + " IS NOT PRESENT IN OTP DB!")
+            LOG.info("User '" + username + "' does not have the Two-Factor authentication enabled")
             return super(MyKeystoneBackend, self).authenticate(request=request,
                                                                username=username,
                                                                password=password,
