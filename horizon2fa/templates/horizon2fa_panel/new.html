@@ -21,9 +21,14 @@
       </div>
       <a href="index" class="btn btn-primary">Back</a>
       <button type="submit" class="btn btn-primary">Enable 2FA</button>
-      {% if invalid %}
-        Invalid password
-      {% endif %}
+      <div>
+        {% if invalid %}
+          Invalid password
+        {% endif %}
+        {% if user_exists %}
+          You have already enabled the Two-Factor authentication!
+        {% endif %}
+      </div>
     </form>
   </div>
 </div>

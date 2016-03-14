@@ -6,13 +6,13 @@ from user import User
 
 class Horizon2FA(models.Model):
 
-    def otpConfirm(self, user_email, user_otp):                          # WARNING
+    def otpConfirm(self, userid, user_otp):                          # WARNING
 
-        u = User.get_user(user_email)                          # WARNING
+        u = User.get_user(userid)                          # WARNING
 
         if u is None:
-            print("[Error]: Invalid email address.")                          # WARNING
-            return {"system": {"error": "Invalid email address."}}                          # WARNING
+            print("[Error]: Invalid user.")                          # WARNING
+            return {"system": {"error": "Invalid user."}}                          # WARNING
         else:
             if u.verifyToken(user_otp):
                 print("[Notice]: Authentication successful!")
@@ -21,27 +21,27 @@ class Horizon2FA(models.Model):
                 print("[Error]: Invalid one-time token!")
                 return {"route": "new.html"}
 
-    def login(self, user_email, user_otp, user_pass):                          # WARNING
+    def login(self, userid, user_otp):                          # WARNING
         """Login form."""
 
-        u = User.get_user(user_email)                          # WARNING
+        u = User.get_user(userid)                          # WARNING		#CHECK SE PASSARE USERNAME O USERID
         if u is None:
-            print("[Error]: Invalid email address.")                          # WARNING
-            return {"system": {"error": "Invalid email address."}}                          # WARNING
+            print("[Error]: Invalid user.")                          # WARNING
+            return {"system": {"error": "Invalid user."}}                          # WARNING
         else:
-            if u.authenticate(user_email, user_otp, user_pass):                          # WARNING
+            if u.authenticate(userid, user_otp):                          # WARNING
                 print("[Notice]: Authentication successful!")
                 return {"route": "view.html"}, u
             else:
-                print("[Error]: Invalid password or one-time token!")
+                print("[Error]: Invalid one-time token!")
                 return {"route": "login.html"}, u
 
-    def code(self, user_email):                          # WARNING
+    def code(self, userid):                          # WARNING
         """
         Returns the one-time password associated with the given user for the
         current time window. Returns empty string if user is not found.
         """
-        u = User.get_user(user_email)                          # WARNING
+        u = User.get_user(userid)                          # WARNING
 
         if u is None:
             return ''
@@ -49,8 +49,11 @@ class Horizon2FA(models.Model):
         t = pyotp.TOTP(u.key)
         return str(t.now())
 
-    def new(self, userid, key, password):
-        return User.create(userid, key, password)
+#    def new(self, userid, key, password):
+#        return User.create(userid, key, password)
+
+    def new(self, userid, username, key):
+        return User.create(userid, username, key)
 
     def save(self, u):
         return u.save()
@@ -64,7 +67,12 @@ class Horizon2FA(models.Model):
         if u is None:
             return ''
         t = pyotp.TOTP(u.key)
-        q = qrcode.make(t.provisioning_uri(u.userid))
+        issuer = u.username + "@Fastcloud"
+
+        qr = qrcode.QRCode(version=2)
+        qr.add_data(t.provisioning_uri(u.userid, issuer))
+        qr.make()
+        q = qr.make_image()
         img = StringIO()
         q.save(img)
         img.seek(0)

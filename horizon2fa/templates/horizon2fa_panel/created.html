@@ -17,7 +17,7 @@
   </p>
 	<form class="form" role="form" method="post" action="otpconfirm">{% csrf_token %}
 	 <div class="form-group">
-		<input id="email" type="hidden" name="email" value="{{user.email}}">
+		<input id="userid" type="hidden" name="userid" value="{{request.user.id}}">
 	 </div>
 	 <div class="form-group">
 	   <label for="input-otp">Temporary code</label>

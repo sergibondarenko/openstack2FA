@@ -27,7 +27,7 @@ window.onload = function() {
 			type: "POST",
 			dataType: "json",
 			url: "code",
-			data : { "email": "{{user.email}}" },
+			data : { "userid": "{{user.id}}" },
               cache: false
             })
               .done(function( html ) {

@@ -8,21 +8,29 @@
 {% endblock page_header %}
 
 {% block main %}
+<div class="col-md-4">
   <form class="form" role="form" method="post" action="login">{% csrf_token %}
-  <div class="form-group">
-    <label for="input-email">Username</label>
-    <input type="text" name="email" class="form-control" id="input-email" placeholder="Enter username" value="{{request.form.email}}">
-  </div>
-  <div class="form-group">
-    <label for="input-otp">Password</label>
-    <input type="password" name="password" class="form-control" id="input-password" placeholder="Enter Password">
-  </div>
-  <div class="form-group">
-    <label for="input-otp">Temporary code</label>
-    <input type="text" name="otp" class="form-control" id="input-otp" placeholder="Enter Temporary Code">
-  </div>
-  <a href="index" class="btn btn-primary">Back</a>
-  <button type="submit" class="btn btn-primary">Log in</button>
-</form>
+    <div class="form-group">
+<!--
+      <label for="input-email">Username</label>
+      <input type="text" name="username" class="form-control" id="input-username" placeholder="Enter username" value="{{request.form.username}}">
+-->
+      <span>User ID:</span>
+      <span>{{ request.user.id }}</span>
+    </div>
+<!--
+    <div class="form-group">
+      <label for="input-otp">Password</label>
+      <input type="password" name="password" class="form-control" id="input-password" placeholder="Enter Password">
+    </div>
+-->
+    <div class="form-group">
+      <label for="input-otp">Temporary code</label>
+      <input type="text" name="otp" class="form-control" id="input-otp" placeholder="Enter Temporary Code">
+    </div>
+    <a href="index" class="btn btn-primary">Back</a>
+    <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+</div>
 {% endblock %}
 

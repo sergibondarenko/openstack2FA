@@ -6,13 +6,13 @@ from django.core.exceptions import ObjectDoesNotExist
 class User(models.Model):
 
     userid = models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
     key = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
 
     # https://docs.djangoproject.com/en/1.9/ref/models/instances/
     @classmethod
-    def create(cls, userid, key, password):
-        u = cls(userid=userid, key=key, password=password)
+    def create(cls, userid, username, key):
+        u = cls(userid=userid, username=username, key=key)
 
         if u.key is None:
             u.key = pyotp.random_base32()
@@ -34,11 +34,10 @@ class User(models.Model):
         t = pyotp.TOTP(self.key)
         return t.verify(otp)
 
-    def authenticate(self, userid, otp, passwd):                           # WARNING
+    def authenticate(self, userid, otp):                           # WARNING
         try:
             u = User.objects.get(userid=userid)                             # WARNING
-            if passwd == u.password:
-                return self.verifyToken(otp)
+            return self.verifyToken(otp)
         except ObjectDoesNotExist:
             return False
 
