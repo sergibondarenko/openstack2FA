@@ -34,17 +34,17 @@ class User(models.Model):
         t = pyotp.TOTP(self.key)
         return t.verify(otp)
 
-    def authenticate(self, userid, otp):                           # WARNING
+    def authenticate(self, userid, otp):
         try:
-            u = User.objects.get(userid=userid)                             # WARNING
+            u = User.objects.get(userid=userid)
             return self.verifyToken(otp)
         except ObjectDoesNotExist:
             return False
 
     @classmethod
-    def get_user(cls, userid):                                             # WARNING
+    def get_user(cls, userid):
         try:
-            u = User.objects.get(userid=userid)                             # WARNING
+            u = User.objects.get(userid=userid)
             return u
         except ObjectDoesNotExist:
             return None

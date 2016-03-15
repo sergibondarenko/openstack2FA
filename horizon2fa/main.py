@@ -6,13 +6,13 @@ from user import User
 
 class Horizon2FA(models.Model):
 
-    def otpConfirm(self, userid, user_otp):                          # WARNING
+    def otpConfirm(self, userid, user_otp):
 
-        u = User.get_user(userid)                          # WARNING
+        u = User.get_user(userid)
 
         if u is None:
-            print("[Error]: Invalid user.")                          # WARNING
-            return {"system": {"error": "Invalid user."}}                          # WARNING
+            print("[Error]: Invalid user.")
+            return {"system": {"error": "Invalid user."}}
         else:
             if u.verifyToken(user_otp):
                 print("[Notice]: Authentication successful!")
@@ -21,36 +21,33 @@ class Horizon2FA(models.Model):
                 print("[Error]: Invalid one-time token!")
                 return {"route": "new.html"}
 
-    def login(self, userid, user_otp):                          # WARNING
+    def login(self, userid, user_otp):
         """Login form."""
 
-        u = User.get_user(userid)                          # WARNING		#CHECK SE PASSARE USERNAME O USERID
+        u = User.get_user(userid)
         if u is None:
-            print("[Error]: Invalid user.")                          # WARNING
-            return {"system": {"error": "Invalid user."}}                          # WARNING
+            print("[Error]: Invalid user.")
+            return {"system": {"error": "Invalid user."}}
         else:
-            if u.authenticate(userid, user_otp):                          # WARNING
+            if u.authenticate(userid, user_otp):
                 print("[Notice]: Authentication successful!")
                 return {"route": "view.html"}, u
             else:
                 print("[Error]: Invalid one-time token!")
                 return {"route": "login.html"}, u
 
-    def code(self, userid):                          # WARNING
+    def code(self, userid):
         """
         Returns the one-time password associated with the given user for the
         current time window. Returns empty string if user is not found.
         """
-        u = User.get_user(userid)                          # WARNING
+        u = User.get_user(userid)
 
         if u is None:
             return ''
 
         t = pyotp.TOTP(u.key)
         return str(t.now())
-
-#    def new(self, userid, key, password):
-#        return User.create(userid, key, password)
 
     def new(self, userid, username, key):
         return User.create(userid, username, key)

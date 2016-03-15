@@ -3,7 +3,6 @@ from keystoneauth1 import exceptions as keystone_exceptions
 from user import User
 import logging
 
-
 LOG = logging.getLogger(__name__)
 
 
@@ -15,7 +14,6 @@ def getUsersList():
     users_list = keystone.users.list()
     return users_list
 
-
 def getUserName(user_id):
     users_list = getUsersList()
     u = next(( i for i in users_list if i.id == user_id), None)
@@ -24,7 +22,6 @@ def getUserName(user_id):
     else:
         return u.name
 
-
 def getUserId(user_name):
     users_list = getUsersList()
     u = next(( i for i in users_list if i.name == user_name), None)
@@ -32,7 +29,6 @@ def getUserId(user_name):
         return u
     else:
         return u.id
-
 
 def testUserAuthentication(userid, password):
     try:

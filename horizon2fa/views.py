@@ -9,9 +9,7 @@ from keystoneclient.v3 import client
 from user import User
 import misc, pdb, logging
 
-
 twoFA = Horizon2FA()
-
 LOG = logging.getLogger(__name__)
 
 
@@ -27,19 +25,16 @@ def index(request):
     else:
         return render(request, 'horizon2fa_panel/index.html', { "user_exists":True })
 
-
 def loginview(request):
     return render(request, 'horizon2fa_panel/login.html', {})
-
 
 def newview(request):
     return render(request, 'horizon2fa_panel/new.html', {})
 
-
 def otpconfirm(request):
     if request.method == 'POST':
         try:
-            result = twoFA.otpConfirm(request.POST['userid'],                          # WARNING
+            result = twoFA.otpConfirm(request.POST['userid'],
                                     request.POST['otp'])
 
             if 'system' in result.keys():
@@ -53,7 +48,6 @@ def otpconfirm(request):
     else:
         return render(request, 'horizon2fa_panel/new.html', {})
 
-
 def login(request):
     user = None
 
@@ -64,7 +58,7 @@ def login(request):
             if 'system' in result.keys():
                 return result
             else:
-                context = {'user': {'id': request.user.id}}                          # WARNING
+                context = {'user': {'id': request.user.id}}
                 return render(request, 'horizon2fa_panel/'
                               + result['route'], context)
 
@@ -75,32 +69,12 @@ def login(request):
     else:
         return render(request, 'horizon2fa_panel/login.html', {})
 
-#        try:
-#            result, user = twoFA.login(request.POST['email'],                          # WARNING
-#                                       request.POST['otp'],
-#                                       request.POST['password'])
-#
-#            if 'system' in result.keys():
-#                return result
-#            else:
-#                context = {'user': {'email': user.email}}                          # WARNING
-#                return render(request, 'horizon2fa_panel/'
-#                              + result['route'], context)
-#
-#        except Exception as e:
-#            print("[Error]: Fail to login on backend. Details: %s." % e)
-#            return render(request, 'horizon2fa_panel/login.html', {})
-#
-#    else:
-#        return render(request, 'horizon2fa_panel/login.html', {})
-
-
 @csrf_exempt
 def code(request):
     if request.method == 'POST':
         LOG.debug("##############" + request.POST['userid'])
         try:
-            result = twoFA.code(request.POST['userid'])                          # WARNING
+            result = twoFA.code(request.POST['userid'])
 
             if len(result) > 0:
                 return HttpResponse(json.dumps(result),
@@ -108,7 +82,6 @@ def code(request):
 
         except Exception as e:
             print("[Error]: Fail to get codes. Details: %s." % e)
-
 
 def new(request):
     """New user form."""
@@ -128,7 +101,6 @@ def new(request):
 
     else:
         return render(request, 'horizon2fa_panel/new.html')
-
 
 def qr(request):
     return HttpResponse(twoFA.qr(request.user.id), content_type="image/png")
