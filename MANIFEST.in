@@ -1,0 +1,4 @@
+include LICENSE
+include README.rst
+recursive-include horizon2fa/static *
+recursive-include horizon2fa/templates *

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta charset="utf-8">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    {% endblock %}
+  </head>
+  <body>
+  
+    <div class="container page">
+        <div class="content">
+        <div class="jumbotron">
+            <h1>{% block pagetitle %}{% endblock %}</h1>
+                {% if messages %}
+                    {# <ul class="flashes"> #}
+                        {% for category, message in messages %}
+                            {# <li class="{{ category }}">{{ message }}</li> #}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {# </ul> #}
+                {% endif %}
+            
+              {% block content %}
+              {% endblock %}
+            </div>
+        </div>
+        <hr>
+        {% block footer %}
+        <footer class="footer">
+            <p>
+                For demonstration purposes only. Any entered data might be
+                easily accessible to anyone, and might be lost with no notice.
+                Uses <a href="https://github.com/nathforge/pyotp">pyotp</a> and
+                <a href="https://pypi.python.org/pypi/qrcode">qrcode</a>.
+            </p>
+        </footer>
+        {% endblock %}
+    </div>
+    {% block js_footer %}
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    {% endblock %}
+  </body>
+</html>

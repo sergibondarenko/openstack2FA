@@ -1,0 +1,12 @@
+Metadata-Version: 1.0
+Name: myplugin
+Version: 0.0.1.dev2
+Summary: A panel plugin for OpenStack Dashboard
+Home-page: http://www.openstack.org/
+Author: myname
+Author-email: myemail
+License: UNKNOWN
+Description: 
+        
+        
+Platform: UNKNOWN
